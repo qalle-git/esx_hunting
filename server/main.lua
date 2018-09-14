@@ -14,7 +14,7 @@ AddEventHandler('esx-qalle-hunting:reward', function(Weight)
         xPlayer.addInventoryItem('meat', 3)
     end
 
-    xPlayer.addInventoryItem('leather', math.random(0, 4))
+    xPlayer.addInventoryItem('leather', math.random(1, 4))
         
 end)
 
@@ -34,9 +34,9 @@ AddEventHandler('esx-qalle-hunting:sell', function()
 
         xPlayer.removeInventoryItem('meat', MeatQuantity)
         xPlayer.removeInventoryItem('leather', LeatherQuantity)
-        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Du sålde ' .. LeatherQuantity + MeatQuantity .. ' för ' .. LeatherPrice * LeatherQuantity + MeatPrice * MeatQuantity .. ' SEK')
+        TriggerClientEvent('esx:showNotification', xPlayer.source, 'You sold ' .. LeatherQuantity + MeatQuantity .. ' and earned $' .. LeatherPrice * LeatherQuantity + MeatPrice * MeatQuantity)
     else
-        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Du har inget läder eller kött!')
+        TriggerClientEvent('esx:showNotification', xPlayer.source, 'You don\'t have any meat or leather')
     end
         
 end)

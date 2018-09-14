@@ -44,9 +44,9 @@ local AnimalPositions = {
 local AnimalsInSession = {}
 
 local Positions = {
-	{ hint = '[E] Start Hunting', x = -769.23773193359, y = 5595.6215820313, z = 33.48571395874 },
-	{ hint = '[E] Sell', x = 969.16375732422, y = -2107.9033203125, z = 31.475671768188 },
-	{ x = -769.63067626953, y = 5592.7573242188, z = 33.48571395874 }
+	['StartHunting'] = { ['hint'] = '[E] Start Hunting', ['x'] = -769.23773193359, ['y'] = 5595.6215820313, ['z'] = 33.48571395874 },
+	['Sell'] = { ['hint'] = '[E] Sell', ['x'] = 969.16375732422, ['y'] = -2107.9033203125, ['z'] = 31.475671768188 },
+	['SpawnATV'] = { ['x'] = -769.63067626953, ['y'] = 5592.7573242188, ['z'] = 33.48571395874 }
 }
 
 local OnGoingHuntSession = false
@@ -56,7 +56,7 @@ function LoadMarkers()
 
 	Citizen.CreateThread(function()
 		for index, v in ipairs(Positions) do
-			if v.hint ~= nil then
+			if index ~= 'SpawnATV' then
 				local StartBlip = AddBlipForCoord(v.x, v.y, v.z)
 				SetBlipSprite(StartBlip, 442)
 				SetBlipColour(StartBlip, 75)
@@ -83,9 +83,9 @@ function LoadMarkers()
 			for index, value in pairs(Positions) do
 				if value.hint ~= nil then
 
-					if OnGoingHuntSession and index == 1 then
+					if OnGoingHuntSession and index == 'StartHunting' then
 						value.hint = '[E] Stop Hunting'
-					elseif not OnGoingHuntSession and index == 1 then
+					elseif not OnGoingHuntSession and index == 'StartHunting' then
 						value.hint = '[E] Start Hunting'
 					end
 
@@ -96,7 +96,7 @@ function LoadMarkers()
 						DrawM(value.hint, 27, value.x, value.y, value.z - 0.945, 255, 255, 255, 1.5, 15)
 						if distance < 1.0 then
 							if IsControlJustReleased(0, Keys['E']) then
-								if index == 1 then
+								if index == 'StartHunting' then
 									StartHuntingSession()
 								else
 									SellItems()
@@ -119,8 +119,8 @@ function StartHuntingSession()
 
 		OnGoingHuntSession = false
 
-		RemoveWeaponFromPed(GetPlayerPed(-1), GetHashKey("WEAPON_HEAVYSNIPER"), true, true)
-		RemoveWeaponFromPed(GetPlayerPed(-1), GetHashKey("WEAPON_KNIFE"), true, true)
+		RemoveWeaponFromPed(PlayerPedId(), GetHashKey("WEAPON_HEAVYSNIPER"), true, true)
+		RemoveWeaponFromPed(PlayerPedId(), GetHashKey("WEAPON_KNIFE"), true, true)
 
 		DeleteEntity(HuntCar)
 
@@ -135,7 +135,7 @@ function StartHuntingSession()
 
 		--Car
 
-		HuntCar = CreateVehicle(GetHashKey('blazer'), Positions[3].x, Positions[3].y, Positions[3].z, 169.79, true, false)
+		HuntCar = CreateVehicle(GetHashKey('blazer'), Positions['SpawnATV'].x, Positions['SpawnATV'].y, Positions['SpawnATV'].z, 169.79, true, false)
 
 		GiveWeaponToPed(PlayerPedId(), GetHashKey("WEAPON_HEAVYSNIPER"),45, true, false)
 		GiveWeaponToPed(PlayerPedId(), GetHashKey("WEAPON_KNIFE"),0, true, false)
@@ -214,7 +214,7 @@ function SlaughterAnimal(AnimalId)
 
 	local AnimalWeight = math.random(10, 160) / 10
 
-	ESX.ShowNotification('Du flådde djuret och köttet vägde ' ..AnimalWeight.. 'kg')
+	ESX.ShowNotification('You slaughtered the animal and recieved an meat of ' ..AnimalWeight.. 'kg')
 
 	TriggerServerEvent('esx-qalle-hunting:reward', AnimalWeight)
 
