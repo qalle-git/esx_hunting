@@ -11,6 +11,4 @@
 2) Add this in your server.cfg :
 ``start esx_hunting``
 
-3) Add this into the esx_basicneeds for bars:
-
-``import items.sql``
+3) ``import items.sql``
